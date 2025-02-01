@@ -2,83 +2,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Anime Studio Pro</title>
+    <title>AI Animation Studio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .animation-preview {
-            border: 3px solid #2c3e50;
+        .preview-box {
+            border: 2px solid #4a90e2;
             border-radius: 15px;
             min-height: 500px;
-            background: #34495e;
-        }
-        .progress-container {
-            height: 25px;
-            border-radius: 12px;
-            overflow: hidden;
+            background: #1a1a1a;
         }
     </style>
 </head>
 <body class="bg-dark text-light">
     <div class="container py-5">
-        <h1 class="text-center mb-4">AI Anime Studio</h1>
+        <h1 class="text-center mb-4">AI Animation Generator</h1>
         
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="p-3 bg-secondary rounded">
-                    <h3>Production Panel</h3>
+                    <h3>Settings</h3>
                     <div class="mb-3">
-                        <label>Story Prompt</label>
-                        <textarea id="prompt" class="form-control bg-dark text-light" rows="5"></textarea>
+                        <textarea id="prompt" class="form-control bg-dark text-light" 
+                                  placeholder="Enter your story prompt..." rows="5"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label>Animation Style</label>
-                        <select id="style" class="form-select bg-dark text-light">
-                            <option>Studio Ghibli</option>
-                            <option>Cyberpunk</option>
-                            <option>Shonen</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary w-100" onclick="startProduction()">Generate Animation</button>
+                    <button class="btn btn-primary w-100" onclick="startGeneration()">
+                        Generate Animation
+                    </button>
                 </div>
             </div>
-
+            
             <div class="col-md-8">
-                <div class="animation-preview p-3">
-                    <div id="progress" class="progress-container mb-3 d-none">
-                        <div class="progress-bar bg-success" style="width: 0%"></div>
+                <div class="preview-box p-3">
+                    <div id="progress" class="progress mb-3 d-none">
+                        <div class="progress-bar" style="width: 0%"></div>
                     </div>
-                    <div id="result" class="text-center"></div>
+                    <div id="result"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-    async function startProduction() {
+    async function startGeneration() {
         const progress = document.getElementById('progress')
         const resultDiv = document.getElementById('result')
         progress.classList.remove('d-none')
         
-        const response = await fetch('/generate', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                prompt: document.getElementById('prompt').value,
-                style: document.getElementById('style').value
-            })
-        });
-
-        const data = await response.json()
-        
-        resultDiv.innerHTML = 
-            <video controls class="w-100">
-                <source src="${data.video}" type="video/mp4">
-            </video>
-            <div class="mt-3">
-                <h4>Screenplay</h4>
-                <pre>${data.screenplay}</pre>
-            </div>
-        
+        try {
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    prompt: document.getElementById('prompt').value,
+                    style: 'anime'
+                })
+            });
+            
+            const data = await response.json()
+            resultDiv.innerHTML = 
+                <video controls class="w-100">
+                    <source src="${data.video}" type="video/mp4">
+                </video>
+                <div class="mt-3">
+                    <h4>Screenplay</h4>
+                    <pre class="text-white">${data.screenplay}</pre>
+                </div>
+            
+        } catch (error) {
+            resultDiv.innerHTML = <div class="alert alert-danger">${error.message}</div>
+        }
     }
     </script>
 </body>
