@@ -1,86 +1,85 @@
-from flask import Flask, render_template, request, jsonify, session
+# app.py
+from flask import Flask, render_template, request, jsonify
 import os
 import uuid
 import replicate
 import requests
 from moviepy.editor import *
-from blender_script import generate_animation
+from lottie import Animation
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-app.config['UPLOAD_FOLDER'] = "static\output"
+app.config['UPLOAD_FOLDER'] = 'static/output'
 
-APIS = {
-    "REPLICATE_KEY": os.getenv('REPLICATE_API_KEY'),
-    "ELEVENLABS_KEY": os.getenv('ELEVENLABS_API_KEY'),
-    "BLENDER_MODEL": "https://github.com/OpenAnimationModels/Anime_Character_v2/raw/main/character.blend"
-}
+class AnimationGenerator:
+    def __init__(self):
+        self.animation_engine = Animation(api_key=os.getenv('LOTTIE_API_KEY'))
+        
+    def generate_story(self, prompt):
+        response = replicate.run(
+            "meta/llama-2-70b-chat",
+            input={"prompt": f"Write anime screenplay: {prompt}"}
+        )
+        return ''.join(response)
+    
+    def generate_scene(self, scene_desc, style):
+        return replicate.run(
+            "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+            input={"prompt": f"Anime {style} style, {scene_desc}"}
+        )[0]
+    
+    def create_animation(self, images, audio_path, output_name):
+        # Create Lottie animation
+        animation_data = self.animation_engine.create(
+            assets=images,
+            animation_type="slide_show",
+            duration=5
+        )
+        
+        # Render to video
+        animation_clip = self.animation_engine.render(animation_data['id'])
+        audio_clip = AudioFileClip(audio_path)
+        
+        final_clip = animation_clip.set_audio(audio_clip)
+        final_clip.write_videofile(output_name, fps=24)
+        return output_name
 
-# Enhanced Story Generation System
-def generate_story(prompt):
-    response = replicate.run(
-        "meta/llama-2-70b-chat",
-        input={
-            "prompt": f"Generate detailed anime screenplay in markdown format about: {prompt}",
-            "system_prompt": "You are professional anime writer. Include: characters, dialogues, scenes, camera angles",
-            "max_length": 4000
-        }
-    )
-    return ''.join(response)
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-# Advanced Image Generation
-def generate_scene_image(scene_desc, style):
-    output = replicate.run(
-        "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
-        input={
-            "prompt": f"Anime {style} style, 4k detailed, {scene_desc}",
-            "negative_prompt": "text, watermark, low quality",
-            "num_outputs": 1
-        }
-    )
-    return output[0]
-
-# Professional Voice Generation
-def generate_voice_over(text):
-    headers = {"xi-api-key": APIS["ELEVENLABS_KEY"]}
-    response = requests.post(
-        f"https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM",
-        headers=headers,
-        json={"text": text, "model_id": "eleven_monolingual_v1"}
-    )
-    return response.content
-
-# Main Animation Workflow
 @app.route('/generate', methods=['POST'])
-def generate_animation():
-    user_input = request.json
+def generate():
+    data = request.json
     session_id = str(uuid.uuid4())
     
-    # Step 1: Generate Story
-    screenplay = generate_story(user_input['prompt'])
+    # Initialize components
+    generator = AnimationGenerator()
     
-    # Step 2: Generate Visual Assets
-    scenes = screenplay.split('## Scene ')[1:5]  # Take first 4 scenes
-    image_paths = []
+    # Generate story
+    screenplay = generator.generate_story(data['prompt'])
+    
+    # Generate scenes
+    scenes = screenplay.split("\n\n")[:3]
+    images = []
     for idx, scene in enumerate(scenes):
-        img_url = generate_scene_image(scene, user_input['style'])
+        img_url = generator.generate_scene(scene, data['style'])
         img_path = f"{app.config['UPLOAD_FOLDER']}/scene_{idx}.png"
         download_image(img_url, img_path)
-        image_paths.append(img_path)
+        images.append(img_path)
     
-    # Step 3: Generate Voiceover
-    audio_content = generate_voice_over(screenplay[:2000])
+    # Generate audio
+    audio_content = generate_voice(screenplay[:2000])
     audio_path = f"{app.config['UPLOAD_FOLDER']}/voice_{session_id}.mp3"
     with open(audio_path, 'wb') as f:
         f.write(audio_content)
     
-    # Step 4: Create Animation
-    video_path = generate_animation(image_paths, audio_path)  # Blender integration
+    # Create animation
+    video_path = generator.create_animation(images, audio_path, "final_animation.mp4")
     
     return jsonify({
         "video": video_path,
-        "screenplay": screenplay,
-        "assets": image_paths
+        "screenplay": screenplay
     })
 
 def download_image(url, path):
@@ -88,9 +87,14 @@ def download_image(url, path):
     with open(path, 'wb') as f:
         f.write(response.content)
 
-@app.route('/')
-def index(): 
-    return render_template('index.html')
+def generate_voice(text):
+    headers = {"xi-api-key": os.getenv('ELEVENLABS_API_KEY')}
+    response = requests.post(
+        "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM",
+        headers=headers,
+        json={"text": text}
+    )
+    return response.content
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
