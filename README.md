@@ -44,7 +44,7 @@ Live Demo: [Watch Sample Animation](https://youtu.be/QbZ23GTOHBA)
 ### Installation
 `bash
 # Clone repository
-git clone https://github.com/yourusername/AnimeStudioAI.git
+git clone https://github.com/mohamedNadyS/AnimeStudioAI.git
 cd AnimeStudioAI
 
 # Install dependencies
