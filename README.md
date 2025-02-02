@@ -5,7 +5,7 @@
 
 An end-to-end AI system for generating anime animations from text prompts. Built with cutting-edge AI tools and cinematic pipelines.
 
-Live Demo: [Watch Sample Animation](https://yourusername.github.io/AnimeStudioAI)
+Live Demo: [Watch Sample Animation](https://youtu.be/QbZ23GTOHBA)
 
 ---
 
