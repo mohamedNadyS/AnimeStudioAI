@@ -1,31 +1,51 @@
-# AnimeStudioAI 🎨
+# 🎥 AI-Powered Anime Studio 🚀
 
-[![PyTorch Version](https://img.shields.io/badge/PyTorch-2.0+-red)](https://pytorch.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mohamedNadyS/AnimeStudioAI)
+[![Run on Replit](https://replit.com/badge/github/yourusername/AnimeStudioAI)](https://replit.com/new/github/yourusername/AnimeStudioAI)
+[![GitHub License](https://img.shields.io/github/license/yourusername/AnimeStudioAI)](https://github.com/yourusername/AnimeStudioAI/blob/main/LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org)
 
-Transform real-world images into anime-style artwork using advanced deep learning techniques.
+An end-to-end AI system for generating anime animations from text prompts. Built with cutting-edge AI tools and cinematic pipelines.
 
-![Input-Output Comparison](docs/comparison.png)
+Live Demo: [Watch Sample Animation](https://yourusername.github.io/AnimeStudioAI)
 
-## Features ✨
-- Real-time image-to-anime conversion
-- Multiple artistic style presets
-- Batch processing support
-- GPU acceleration
-- Interactive Gradio web interface
+---
 
-## Installation 🛠️
-```bash
-git clone https://github.com/mohamedNadyS/AnimeStudioAI
-cd AnimeStudioAI
-pip install -r requirements.txt)
+## 🌟 Features
+
+- AI Story Generation - GPT-powered screenplay creation
+- Cinematic Scene Generation - SDXL for high-quality anime frames
+- Professional Voiceovers - Natural TTS narration
+- Blender Integration - 3D animation pipeline
+- Web Interface - User-friendly production dashboard
+
+---
+
+## 🛠️ Technologies Used
+
+| Technology              | Purpose                          |
+|-------------------------|----------------------------------|
+| Flask                   | Web Backend                      |
+| Replicate API           | Image/Text Generation            |
+| ElevenLabs API          | Voice Synthesis                  |
+| Blender                 | 3D Animation                     |
+| MoviePy                 | Video Composition                |
+| Bootstrap               | Frontend Design                  |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.8+
+- GitHub Account
+- Free API Keys:
+  - [Replicate API Key](https://replicate.com)
   - [ElevenLabs API Key](https://elevenlabs.io)
 
 ### Installation
 `bash
 # Clone repository
-git clone https://github.com/MohamedNadyS/AnimeStudioAI.git
+git clone https://github.com/yourusername/AnimeStudioAI.git
 cd AnimeStudioAI
 
 # Install dependencies
