@@ -1,41 +1,25 @@
-# AnimeStudioAI
-# 🎥 AI-Powered Anime Studio 🚀
+# AnimeStudioAI 🎨
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org)
+[![PyTorch Version](https://img.shields.io/badge/PyTorch-2.0+-red)](https://pytorch.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mohamedNadyS/AnimeStudioAI)
 
-An end-to-end AI system for generating anime animations from text prompts. Built with cutting-edge AI tools and cinematic pipelines.
----
+Transform real-world images into anime-style artwork using advanced deep learning techniques.
 
-## 🌟 Features
+![Input-Output Comparison](docs/comparison.png)
 
-- AI Story Generation - GPT-powered screenplay creation
-- Cinematic Scene Generation - SDXL for high-quality anime frames
-- Professional Voiceovers - Natural TTS narration
-- Blender Integration - 3D animation pipeline
-- Web Interface - User-friendly production dashboard
+## Features ✨
+- Real-time image-to-anime conversion
+- Multiple artistic style presets
+- Batch processing support
+- GPU acceleration
+- Interactive Gradio web interface
 
----
-
-## 🛠️ Technologies Used
-
-| Technology              | Purpose                          |
-|-------------------------|----------------------------------|
-| Flask                   | Web Backend                      |
-| Replicate API           | Image/Text Generation            |
-| ElevenLabs API          | Voice Synthesis                  |
-| Blender                 | 3D Animation                     |
-| MoviePy                 | Video Composition                |
-| Bootstrap               | Frontend Design                  |
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Python 3.8+
-- GitHub Account
-- Free API Keys:
-  - [Replicate API Key](https://replicate.com)
+## Installation 🛠️
+```bash
+git clone https://github.com/mohamedNadyS/AnimeStudioAI
+cd AnimeStudioAI
+pip install -r requirements.txt)
   - [ElevenLabs API Key](https://elevenlabs.io)
 
 ### Installation
