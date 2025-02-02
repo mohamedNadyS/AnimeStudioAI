@@ -1,6 +1,5 @@
 # 🎥 AI-Powered Anime Studio 🚀
 
-[![Run on Replit](https://replit.com/badge/github/yourusername/AnimeStudioAI)](https://replit.com/new/github/yourusername/AnimeStudioAI)
 [![GitHub License](https://img.shields.io/github/license/yourusername/AnimeStudioAI)](https://github.com/yourusername/AnimeStudioAI/blob/main/LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org)
 
